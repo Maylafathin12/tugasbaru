@@ -44,7 +44,7 @@ namespace tugasbaru
             NIM.Visible = false;
             Save.Enabled = false;
             Clear.Enabled = false;
-            Add.Enabled = false;
+            Add.Enabled = true;
         }
 
         private void dataGridView()
@@ -125,7 +125,8 @@ namespace tugasbaru
             cbNama();
             Clear.Enabled = true;
             Save.Enabled = true;
-            Add.Enabled = true;
+            Add.Enabled = false;
+
         }
 
         private void Save_Click(object sender, EventArgs e)

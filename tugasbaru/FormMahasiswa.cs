@@ -14,12 +14,37 @@ namespace tugasbaru
 {
     public partial class FormMahasiswa : Form
     {
-        private string stringConnection = "data source=MAYLA;database=tugasbaru;User ID=sa;Password=123";
+        private string StringConnection = "data source=MAYLA;" + "database=tugasbaru;User ID=sa;Password=123";
         private SqlConnection koneksi;
         private string kstr;
         private string nim, nama, alamat, jk, prodi;
         private DateTime tgl;
         BindingSource customersBindingSource = new BindingSource();
+
+        private void FormMahasiswa_Load()
+        {
+            koneksi.Open();
+            SqlDataAdapter dataAdapter1 = new SqlDataAdapter(new SqlCommand("select m.nim, m.nama_mahasiswa,"
+                + "m.alamat, m.jenis_kelamin, m.tgl_lahir, p.nama_prodi From dbo.Mahasisswa m "
+                + "join dbo.Prodi p on m.id_prodi = p.id_prodi", koneksi));
+            DataSet ds = new DataSet();
+            dataAdapter1.Fill(ds);
+
+            this.customersBindingSource.DataSource = ds.Tables[0];
+            this.textBox1.DataBindings.Add(
+                new Binding("Text", this.customersBindingSource, "nim", true));
+            this.textBox2.DataBindings.Add(
+                new Binding("Text", this.customersBindingSource, "nama_mahasiswa", true));
+            this.textBox3.DataBindings.Add(
+                new Binding("Text", this.customersBindingSource, "alamat", true));
+            this.comboBox1.DataBindings.Add(
+                new Binding("Text", this.customersBindingSource, "jenis_kelamin", true));
+            this.dateTimePicker1.DataBindings.Add(
+                new Binding("Text", this.customersBindingSource, "tgl_lahir", true));
+            this.comboBox2.DataBindings.Add(
+                new Binding("Text", this.customersBindingSource, "nama_prodi", true));
+            koneksi.Close();
+        }
 
         private void Prodicbx()
         {
@@ -99,30 +124,6 @@ namespace tugasbaru
             refreshform();
         }
 
-        private void FormMahasiswa_Load()
-        {
-            koneksi.Open();
-            SqlDataAdapter dataAdapter1 = new SqlDataAdapter(new SqlCommand("select m.nim, m.nama_mahasiswa," 
-                + "m.alamat, m.jenis_kelamin, m.tgl_lahir, p.nama_prodi From dbo.Mahasisswa m " 
-                + "join dbo.Prodi p on m.id_prodi = p.id_prodi", koneksi));
-            DataSet ds = new DataSet();
-            dataAdapter1.Fill(ds);
-
-            this.customersBindingSource.DataSource = ds.Tables[0];
-            this.textBox1.DataBindings.Add(
-                new Binding("Text", this.customersBindingSource, "nim", true));
-            this.textBox2.DataBindings.Add(
-                new Binding("Text", this.customersBindingSource, "nama_mahasiswa", true));
-            this.textBox3.DataBindings.Add(
-                new Binding("Text", this.customersBindingSource, "alamat", true));
-            this.comboBox1.DataBindings.Add(
-                new Binding("Text", this.customersBindingSource, "jenis_kelamin", true));
-            this.dateTimePicker1.DataBindings.Add(
-                new Binding("Text", this.customersBindingSource, "tgl_lahir", true));
-            this.comboBox2.DataBindings.Add(
-                new Binding("Text", this.customersBindingSource, "nama_prodi", true));
-            koneksi.Close();
-        }
 
         public FormMahasiswa()
         {
@@ -155,13 +156,6 @@ namespace tugasbaru
             Clear.Enabled = false;
             clearBinding();
             FormMahasiswa_Load();
-        }
-
-        private void FormMahasiswa_FormClosed(object sender,FormClosedEventArgs e)
-        {
-            Form1 fm = new Form1();
-            fm.Show();
-            this.Hide();
         }
     }
 }
